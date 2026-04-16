@@ -33,34 +33,34 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
 });
 
 /**
+ * Verifica se o erro indica que a tabela ainda não foi criada no schema.
+ */
+function isTableMissingError(error: { code?: string; message: string }): boolean {
+  return (
+    error.code === 'PGRST106' ||
+    error.code === '42P01' ||
+    /relation .* does not exist/i.test(error.message) ||
+    /could not find the table/i.test(error.message)
+  );
+}
+
+/**
  * Helper: executa query Supabase e degrada graciosamente se tabela ainda não existir
  * (schema sendo criado em paralelo por outro agent).
  * Retorna array vazio em caso de PGRST106 (schema cache miss) ou 42P01 (undefined_table).
+ * Todos os outros erros são propagados (throw) para que o caller possa tratá-los.
  */
 export async function safeQuery<T>(
   fn: () => PromiseLike<{ data: T[] | null; error: { code?: string; message: string } | null }>
 ): Promise<T[]> {
-  try {
-    const { data, error } = await fn();
-    if (error) {
-      const missing =
-        error.code === 'PGRST106' ||
-        error.code === '42P01' ||
-        /relation .* does not exist/i.test(error.message) ||
-        /could not find the table/i.test(error.message);
-      if (missing) {
-        // eslint-disable-next-line no-console
-        console.warn('[supabase] tabela ainda não criada, retornando [].', error.message);
-        return [];
-      }
+  const { data, error } = await fn();
+  if (error) {
+    if (isTableMissingError(error)) {
       // eslint-disable-next-line no-console
-      console.warn('[supabase] query error:', error.message);
+      console.warn('[supabase] tabela ainda não criada, retornando [].', error.message);
       return [];
     }
-    return data ?? [];
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.warn('[supabase] safeQuery crash:', err);
-    return [];
+    throw new Error(`[supabase] ${error.code ?? 'error'}: ${error.message}`);
   }
+  return data ?? [];
 }
