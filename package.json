@@ -1,0 +1,43 @@
+{
+  "name": "rumo-balanca-mobile",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@expo-google-fonts/inter": "^0.4.2",
+    "@react-native-async-storage/async-storage": "^3.0.2",
+    "@sentry/react-native": "^8.7.0",
+    "@supabase/supabase-js": "^2.103.0",
+    "expo": "~55.0.15",
+    "expo-font": "^55.0.6",
+    "expo-haptics": "^55.0.14",
+    "expo-image-picker": "^17.0.7",
+    "expo-print": "^15.0.5",
+    "expo-router": "^5.1.11",
+    "expo-secure-store": "^55.0.13",
+    "expo-sharing": "^14.0.7",
+    "expo-splash-screen": "^55.0.18",
+    "expo-status-bar": "~3.0.9",
+    "lucide-react-native": "^1.8.0",
+    "react": "19.1.0",
+    "react-native": "^0.85.1",
+    "react-native-gesture-handler": "^2.31.1",
+    "react-native-reanimated": "^4.3.0",
+    "react-native-safe-area-context": "^5.7.0",
+    "react-native-screens": "^4.24.0",
+    "react-native-svg": "^15.15.4",
+    "react-native-url-polyfill": "^3.0.0",
+    "zustand": "^5.0.12"
+  },
+  "devDependencies": {
+    "@types/react": "~19.1.0",
+    "typescript": "~5.9.2"
+  },
+  "private": true
+}

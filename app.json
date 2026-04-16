@@ -1,0 +1,70 @@
+{
+  "expo": {
+    "name": "Rumo Balança",
+    "slug": "rumo-balanca",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "rumobalanca",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0B3D2E"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.agrorumo.balanca",
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Precisamos da câmera para fotografar o caminhão na entrada e saída da balança.",
+        "NSPhotoLibraryUsageDescription": "Permite anexar fotos às pesagens.",
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "com.agrorumo.balanca",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0B3D2E"
+      },
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "Tirar foto do caminhão na balança.",
+          "photosPermission": "Selecionar foto da galeria."
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "4e055c2e-b144-4c1a-af50-2bd2ce301470"
+      }
+    },
+    "owner": "manoelgiansante"
+  }
+}

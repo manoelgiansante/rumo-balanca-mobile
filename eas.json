@@ -1,0 +1,44 @@
+{
+  "cli": {
+    "version": ">= 12.0.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "production": {
+      "autoIncrement": true,
+      "ios": {
+        "image": "latest",
+        "credentialsSource": "local"
+      },
+      "android": {
+        "image": "latest",
+        "buildType": "app-bundle"
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "appleId": "manoelgiansante@gmail.com",
+        "appleTeamId": "5YW9UY5LXP",
+        "ascApiKeyId": "YQGT4C9TB8",
+        "ascApiKeyIssuerId": "315bb9b2-f8be-46c8-b564-1cc997361301",
+        "ascApiKeyPath": "/Users/manoelnascimento/.keys/AuthKey_YQGT4C9TB8.p8"
+      },
+      "android": {
+        "serviceAccountKeyPath": "./play-store-key.json",
+        "track": "production"
+      }
+    }
+  }
+}
