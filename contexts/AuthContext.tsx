@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/react-native';
 import type { Session, User } from '@supabase/supabase-js';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
@@ -29,6 +30,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .then(({ data }) => {
         if (unmounted) return;
         setSession(data.session);
+        if (data.session?.user) {
+          Sentry.setUser({ id: data.session.user.id, email: data.session.user.email });
+        }
         setInitialized(true);
       })
       .catch(() => {
@@ -38,6 +42,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { data: subscription } = supabase.auth.onAuthStateChange(
       (_event, newSession) => {
         setSession(newSession);
+        if (newSession?.user) {
+          Sentry.setUser({ id: newSession.user.id, email: newSession.user.email });
+        } else {
+          Sentry.setUser(null);
+        }
       }
     );
 
@@ -85,6 +94,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       signOut: async () => {
         await supabase.auth.signOut();
         setSession(null);
+        Sentry.setUser(null);
       },
     }),
     [session, isLoading, initialized]

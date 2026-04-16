@@ -50,7 +50,14 @@
           "photosPermission": "Selecionar foto da galeria."
         }
       ],
-      "expo-sharing"
+      "expo-sharing",
+      [
+        "@sentry/react-native/expo",
+        {
+          "organization": "agrorumo",
+          "project": "rumo-balanca"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

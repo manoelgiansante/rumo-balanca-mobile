@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/react-native';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Colors, Radius, Spacing, Typography } from '../constants/theme';
@@ -24,6 +25,9 @@ export default class ErrorBoundary extends React.Component<Props, State> {
   componentDidCatch(error: Error, info: React.ErrorInfo): void {
     // eslint-disable-next-line no-console
     console.error('[ErrorBoundary]', error, info.componentStack);
+    Sentry.captureException(error, {
+      contexts: { react: { componentStack: info.componentStack ?? undefined } },
+    });
   }
 
   handleRetry = () => {

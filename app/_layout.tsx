@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/react-native';
 import {
   Inter_400Regular,
   Inter_500Medium,
@@ -11,6 +12,16 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, useRef } from 'react';
 import ErrorBoundary from '../components/ErrorBoundary';
 import { AuthProvider, useAuth } from '../contexts/AuthContext';
+
+Sentry.init({
+  dsn: process.env.EXPO_PUBLIC_SENTRY_DSN,
+  enabled: !__DEV__ && !!process.env.EXPO_PUBLIC_SENTRY_DSN,
+  tracesSampleRate: 0.2,
+  enableNative: true,
+  enableAutoSessionTracking: true,
+  attachStacktrace: true,
+  debug: false,
+});
 
 SplashScreen.preventAutoHideAsync();
 
@@ -39,7 +50,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-export default function RootLayout() {
+function RootLayout() {
   const [fontsLoaded] = useFonts({
     Inter_400Regular,
     Inter_500Medium,
@@ -73,3 +84,5 @@ export default function RootLayout() {
     </ErrorBoundary>
   );
 }
+
+export default Sentry.wrap(RootLayout);
