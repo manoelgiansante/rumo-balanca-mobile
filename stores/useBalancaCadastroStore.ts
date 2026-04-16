@@ -56,39 +56,45 @@ export const useBalancaCadastroStore = create<CadastroState>((set, get) => ({
   },
 
   fetch: async (table) => {
-    set((s) => ({ loading: { ...s.loading, [table]: true } }));
+    set((s) => ({ loading: { ...s.loading, [table]: true }, error: null }));
 
-    const rows = await safeQuery<Record<string, unknown>>(() =>
-      supabase
-        .from(table)
-        .select('*')
-        .eq('ativo', true)
-        .order('nome', { ascending: true })
-    );
+    try {
+      const rows = await safeQuery<Record<string, unknown>>(() =>
+        supabase
+          .from(table)
+          .select('*')
+          .eq('ativo', true)
+          .order('nome', { ascending: true })
+      );
 
-    set((s) => {
-      const patch: Partial<CadastroState> = {
-        loading: { ...s.loading, [table]: false },
-      };
-      switch (table) {
-        case 'bala_produto':
-          patch.produtos = rows as unknown as BalaProduto[];
-          break;
-        case 'bala_placa':
-          patch.placas = rows as unknown as BalaPlaca[];
-          break;
-        case 'bala_motorista':
-          patch.motoristas = rows as unknown as BalaMotorista[];
-          break;
-        case 'bala_transportadora':
-          patch.transportadoras = rows as unknown as BalaTransportadora[];
-          break;
-        case 'bala_cliente':
-          patch.clientes = rows as unknown as BalaCliente[];
-          break;
-      }
-      return patch as CadastroState;
-    });
+      set((s) => {
+        const patch: Partial<CadastroState> = {
+          loading: { ...s.loading, [table]: false },
+        };
+        switch (table) {
+          case 'bala_produto':
+            patch.produtos = rows as unknown as BalaProduto[];
+            break;
+          case 'bala_placa':
+            patch.placas = rows as unknown as BalaPlaca[];
+            break;
+          case 'bala_motorista':
+            patch.motoristas = rows as unknown as BalaMotorista[];
+            break;
+          case 'bala_transportadora':
+            patch.transportadoras = rows as unknown as BalaTransportadora[];
+            break;
+          case 'bala_cliente':
+            patch.clientes = rows as unknown as BalaCliente[];
+            break;
+        }
+        return patch as CadastroState;
+      });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : `Erro ao carregar ${table}`;
+      console.warn(`[cadastro] fetch ${table} error:`, msg);
+      set((s) => ({ loading: { ...s.loading, [table]: false }, error: msg }));
+    }
   },
 
   create: async (table, payload) => {

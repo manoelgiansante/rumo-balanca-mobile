@@ -26,6 +26,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PrimaryButton } from '../../../components/PrimaryButton';
 import { StatusBadgeBala } from '../../../components/StatusBadgeBala';
 import { Colors, Radius, Shadows, Spacing, Typography } from '../../../constants/theme';
+import { getEmpresaConfig } from '../../../lib/empresa-config';
 import { shareTicketPDF, printTicket } from '../../../lib/ticket-pdf';
 import { useBalancaPesagemStore } from '../../../stores/useBalancaPesagemStore';
 import type { BalaPesagem } from '../../../types/database';
@@ -87,7 +88,8 @@ export default function PesagemDetailScreen() {
     if (!pesagem) return;
     setPdfLoading(true);
     try {
-      await shareTicketPDF(pesagem);
+      const opts = await getEmpresaConfig();
+      await shareTicketPDF(pesagem, opts);
     } catch (err) {
       Alert.alert('Erro', 'Falha ao gerar PDF. Tente novamente.');
     } finally {
@@ -99,7 +101,8 @@ export default function PesagemDetailScreen() {
     if (!pesagem) return;
     setPdfLoading(true);
     try {
-      await printTicket(pesagem);
+      const opts = await getEmpresaConfig();
+      await printTicket(pesagem, opts);
     } catch (err) {
       Alert.alert('Erro', 'Impressao indisponivel.');
     } finally {

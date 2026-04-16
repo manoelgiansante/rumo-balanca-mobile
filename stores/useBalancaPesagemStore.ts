@@ -69,14 +69,19 @@ export const useBalancaPesagemStore = create<PesagemState>((set, get) => ({
 
   fetchAll: async () => {
     set({ loading: true, error: null });
-    const rows = await safeQuery<BalaPesagem>(() =>
-      supabase
-        .from('bala_pesagem')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(500)
-    );
-    set({ pesagens: rows, loading: false });
+    try {
+      const rows = await safeQuery<BalaPesagem>(() =>
+        supabase
+          .from('bala_pesagem')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(500)
+      );
+      set({ pesagens: rows, loading: false });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Erro ao carregar pesagens';
+      set({ loading: false, error: msg });
+    }
   },
 
   fetchById: async (id) => {
