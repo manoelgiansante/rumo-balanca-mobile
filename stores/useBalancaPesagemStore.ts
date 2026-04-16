@@ -150,10 +150,9 @@ export const useBalancaPesagemStore = create<PesagemState>((set, get) => ({
       status: 'aguardando',
     };
 
-    const { data, error } = await supabase
-      .from('bala_pesagem')
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .insert(insertRow as any)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data, error } = await (supabase.from('bala_pesagem') as any)
+      .insert(insertRow)
       .select()
       .single();
 
@@ -168,15 +167,14 @@ export const useBalancaPesagemStore = create<PesagemState>((set, get) => ({
 
   registrarBruto: async (id, peso_bruto_kg) => {
     const now = new Date().toISOString();
-    const { data, error } = await supabase
-      .from('bala_pesagem')
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data, error } = await (supabase.from('bala_pesagem') as any)
       .update({
         peso_bruto_kg,
         bruta_em: now,
         status: 'pesagem_bruta',
         updated_at: now,
-      } as any)
+      })
       .eq('id', id)
       .select()
       .single();
@@ -212,9 +210,8 @@ export const useBalancaPesagemStore = create<PesagemState>((set, get) => ({
     );
 
     const now = new Date().toISOString();
-    const { data, error } = await supabase
-      .from('bala_pesagem')
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data, error } = await (supabase.from('bala_pesagem') as any)
       .update({
         peso_tara_kg,
         peso_liquido_kg: liquido,
@@ -225,7 +222,7 @@ export const useBalancaPesagemStore = create<PesagemState>((set, get) => ({
         tara_em: now,
         status: 'pesagem_tara',
         updated_at: now,
-      } as any)
+      })
       .eq('id', id)
       .select()
       .single();
@@ -243,14 +240,13 @@ export const useBalancaPesagemStore = create<PesagemState>((set, get) => ({
 
   concluir: async (id) => {
     const now = new Date().toISOString();
-    const { data, error } = await supabase
-      .from('bala_pesagem')
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data, error } = await (supabase.from('bala_pesagem') as any)
       .update({
         status: 'concluida',
         saida_em: now,
         updated_at: now,
-      } as any)
+      })
       .eq('id', id)
       .select()
       .single();
@@ -268,14 +264,13 @@ export const useBalancaPesagemStore = create<PesagemState>((set, get) => ({
 
   cancelar: async (id, motivo) => {
     const now = new Date().toISOString();
-    const { error } = await supabase
-      .from('bala_pesagem')
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase.from('bala_pesagem') as any)
       .update({
         status: 'cancelada' satisfies StatusPesagem,
         observacoes: motivo ?? null,
         updated_at: now,
-      } as any)
+      })
       .eq('id', id);
 
     if (error) {
@@ -292,10 +287,9 @@ export const useBalancaPesagemStore = create<PesagemState>((set, get) => ({
   },
 
   anexarFoto: async (id, campo, url) => {
-    const { error } = await supabase
-      .from('bala_pesagem')
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .update({ [campo]: url, updated_at: new Date().toISOString() } as any)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase.from('bala_pesagem') as any)
+      .update({ [campo]: url, updated_at: new Date().toISOString() })
       .eq('id', id);
     if (error) {
       // eslint-disable-next-line no-console

@@ -106,10 +106,9 @@ export const useBalancaCadastroStore = create<CadastroState>((set, get) => ({
       return false;
     }
     const insert = { ...payload, owner_id: user.id };
-    const { error } = await supabase
-      .from(table)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .insert(insert as any);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase.from(table) as any)
+      .insert(insert);
     if (error) {
       set({ error: error.message });
       return false;
@@ -119,10 +118,9 @@ export const useBalancaCadastroStore = create<CadastroState>((set, get) => ({
   },
 
   update: async (table, id, payload) => {
-    const { error } = await supabase
-      .from(table)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .update({ ...payload, updated_at: new Date().toISOString() } as any)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase.from(table) as any)
+      .update({ ...payload, updated_at: new Date().toISOString() })
       .eq('id', id);
     if (error) {
       set({ error: error.message });
@@ -134,10 +132,9 @@ export const useBalancaCadastroStore = create<CadastroState>((set, get) => ({
 
   remove: async (table, id) => {
     // Soft delete
-    const { error } = await supabase
-      .from(table)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .update({ ativo: false, updated_at: new Date().toISOString() } as any)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase.from(table) as any)
+      .update({ ativo: false, updated_at: new Date().toISOString() })
       .eq('id', id);
     if (error) {
       set({ error: error.message });
