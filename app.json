@@ -52,7 +52,9 @@
           "cameraPermission": "Tirar foto do caminhão na balança.",
           "photosPermission": "Selecionar foto da galeria."
         }
-      ]
+      ],
+      "@sentry/react-native",
+      "expo-sharing"
     ],
     "experiments": {
       "typedRoutes": true
